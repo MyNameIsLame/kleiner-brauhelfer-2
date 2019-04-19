@@ -45,7 +45,14 @@ private slots:
 
     void on_btnSudVerbraucht_clicked();
 
+    void on_spinBox_Fass_valueChanged(int arg1);
+
+    void on_spinBox_Siphon_valueChanged(int arg1);
+
+    void on_spinBox_Flasche_valueChanged(int arg1);
+
 private:
+    void recalculate_bottling_values();
     void checkEnabled();
 
 private:

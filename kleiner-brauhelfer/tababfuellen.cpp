@@ -252,6 +252,8 @@ void TabAbfuellen::updateValues()
     ui->tbSEVG->setValue(bh->sud()->getsEVG());
     ui->tbAlkohol->setValue(bh->sud()->geterg_Alkohol());
     ui->tbSpundungsdruck->setValue(bh->sud()->getSpundungsdruck());
+
+    recalculate_bottling_values();
 }
 
 void TabAbfuellen::on_tbAbfuelldatum_dateTimeChanged(const QDateTime &dateTime)
@@ -395,4 +397,38 @@ void TabAbfuellen::on_btnSudTeilen_clicked()
 void TabAbfuellen::on_btnSudVerbraucht_clicked()
 {
     bh->sud()->setBierWurdeVerbraucht(true);
+}
+
+void TabAbfuellen::on_spinBox_Fass_valueChanged(int arg1)
+{
+    recalculate_bottling_values();
+}
+
+void TabAbfuellen::on_spinBox_Siphon_valueChanged(int arg1)
+{
+    recalculate_bottling_values();
+}
+
+void TabAbfuellen::on_spinBox_Flasche_valueChanged(int arg1)
+{
+    recalculate_bottling_values();
+}
+
+void TabAbfuellen::recalculate_bottling_values(){
+    double total = ui->tbJungbiermengeAbfuellen->value();
+    double used = ui->spinBox_Fass->value()*5.0
+                    + ui->spinBox_Siphon->value()*2.0
+                    + ui->spinBox_Flasche->value()*0.33;
+    double remaining = total-used;
+
+    ui->label_GesamtmengeValue->setNum(total);
+    ui->label_VerteiltValue->setNum(used);
+    ui->label_VerbleibendValue->setNum(remaining);
+
+    if(remaining<0){
+        ui->label_VerbleibendValue->setStyleSheet("QLabel { background-color : red; color : white; }");
+    }
+    else {
+        ui->label_VerbleibendValue->setStyleSheet("QLabel {color : black; }");
+    }
 }
